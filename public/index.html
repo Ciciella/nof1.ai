@@ -166,10 +166,151 @@
       </div>
     </section>
 
+    <!-- AI Agents Introduction Section -->
+    <section class="agents-intro-section">
+      <div class="agents-intro-header">
+        <h3 class="agents-intro-title">🤖 智能体团队</h3>
+        <p class="agents-intro-subtitle">当前策略：激进团 (5个智能体) | 总共7个独特角色</p>
+      </div>
+
+      <!-- 激进团策略 - 当前激活 -->
+      <div class="strategy-group active" id="strategy-aggressive">
+        <div class="strategy-header">
+          <h4 class="strategy-title">🎯 激进团策略</h4>
+          <span class="strategy-badge">当前使用</span>
+        </div>
+        <div class="agents-grid">
+          <div class="agent-card main-agent">
+            <div class="agent-avatar">🎯</div>
+            <div class="agent-info">
+              <div class="agent-name">团长</div>
+              <div class="agent-role">激进团领导</div>
+            </div>
+            <div class="agent-description">
+              领导激进团团队，统筹分析并制定交易策略
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-avatar">🔍</div>
+            <div class="agent-info">
+              <div class="agent-name">趋势分析专家</div>
+              <div class="agent-role">团员1</div>
+            </div>
+            <div class="agent-description">
+              K线图分析，判断趋势方向，标注关键支撑压力位
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-avatar">🔮</div>
+            <div class="agent-info">
+              <div class="agent-name">预测分析专家</div>
+              <div class="agent-role">团员2</div>
+            </div>
+            <div class="agent-description">
+              技术指标预测，价格目标计算，最佳入场时机
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-avatar">💰</div>
+            <div class="agent-info">
+              <div class="agent-name">资金流向分析专家</div>
+              <div class="agent-role">团员3</div>
+            </div>
+            <div class="agent-description">
+              成交量分析，资金费率监控，多空力量对比
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-avatar">🛡️</div>
+            <div class="agent-info">
+              <div class="agent-name">风险控制专家</div>
+              <div class="agent-role">团员4</div>
+            </div>
+            <div class="agent-description">
+              止盈止损建议，仓位优化，风险等级评估
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 其他策略智能体 -->
+      <div class="other-strategies">
+        <div class="strategy-group" id="strategy-consensus">
+          <div class="strategy-header">
+            <h4 class="strategy-title">👨‍⚖️ 陪审团策略</h4>
+            <span class="strategy-badge inactive">4个智能体</span>
+          </div>
+          <div class="agents-grid compact">
+            <div class="agent-card main-agent compact">
+              <div class="agent-avatar small">👨‍⚖️</div>
+              <div class="agent-info">
+                <div class="agent-name small">法官</div>
+                <div class="agent-role small">主决策者</div>
+              </div>
+            </div>
+
+            <div class="agent-card compact">
+              <div class="agent-avatar small">📊</div>
+              <div class="agent-info">
+                <div class="agent-name small">技术分析专家</div>
+                <div class="agent-role small">陪审员</div>
+              </div>
+            </div>
+
+            <div class="agent-card compact">
+              <div class="agent-avatar small">📈</div>
+              <div class="agent-info">
+                <div class="agent-name small">趋势分析专家</div>
+                <div class="agent-role small">陪审员</div>
+              </div>
+            </div>
+
+            <div class="agent-card compact">
+              <div class="agent-avatar small">⚠️</div>
+              <div class="agent-info">
+                <div class="agent-name small">风险评估专家</div>
+                <div class="agent-role small">陪审员</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="strategy-group" id="strategy-alpha-beta">
+          <div class="strategy-header">
+            <h4 class="strategy-title">🧠 Alpha Beta策略</h4>
+            <span class="strategy-badge inactive">1个智能体</span>
+          </div>
+          <div class="agents-grid compact">
+            <div class="agent-card main-agent alpha-beta compact">
+              <div class="agent-avatar small">🧠</div>
+              <div class="agent-info">
+                <div class="agent-name small">自主学习者</div>
+                <div class="agent-role small">Alpha-Beta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- AI Decision Section -->
     <section class="chart-section">
       <div class="chart-header">
-        <h3 class="decision-title">AI 群聊决策</h3>
+        <div class="decision-title-container">
+          <h3 class="decision-title">AI 群聊决策</h3>
+          <button class="fullscreen-btn" id="ai-decision-fullscreen-btn" title="全屏查看">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.5 1a.5.5 0 00-.5.5v4a.5.5 0 01-1 0v-4A1.5 1.5 0 011.5 0h4a.5.5 0 01.5.5v4a.5.5 0 01-1 0v-4z"/>
+              <path d="M6 .5a.5.5 0 01.5-.5h6a.5.5 0 01.5.5v6a.5.5 0 01-1 0v-6A1.5 1.5 0 0012.5 0h-6a.5.5 0 00-.5.5v6a.5.5 0 01-1 0v-6z"/>
+              <path d="M.5 6a.5.5 0 01.5-.5h4a.5.5 0 01.5.5v4a.5.5 0 01-1 0v-4A1.5 1.5 0 005.5 1h-4a.5.5 0 00-.5.5v4a.5.5 0 01-1 0v-4z"/>
+              <path d="M6 6a.5.5 0 01.5-.5h4a.5.5 0 01.5.5v4a.5.5 0 01-1 0v-4A1.5 1.5 0 009.5 1h-4a.5.5 0 00-.5.5v4a.5.5 0 01-1 0v-4z"/>
+            </svg>
+          </button>
+        </div>
         <div class="decision-meta" id="decision-meta">
           <span class="decision-time">加载中...</span>
           <span class="decision-iteration">#-</span>
@@ -181,9 +322,26 @@
         <div class="chat-messages" id="chat-messages">
           <p class="loading">加载群聊讨论中...</p>
         </div>
-        <div class="final-decision" id="final-decision" style="display: none;">
-          <h4>🎯 最终决策</h4>
-          <div class="decision-content"></div>
+        <button class="final-decision-btn" id="final-decision-btn" style="display: none;">
+          <span class="btn-icon">🎯</span>
+          <span class="btn-text">查看最终决策</span>
+        </button>
+      </div>
+
+      <!-- 最终决策弹窗 -->
+      <div class="final-decision-modal" id="final-decision-modal">
+        <div class="final-decision-modal-content">
+          <div class="final-decision-modal-header">
+            <h3>🎯 最终决策</h3>
+            <button class="final-decision-modal-close" id="final-decision-modal-close">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M4.646 4.646a.5.5 0 01.708 0L10 9.293l4.646-4.647a.5.5 0 01.708.708L10.707 10l4.647 4.646a.5.5 0 01-.708.708L10 10.707l-4.646 4.647a.5.5 0 01-.708-.708L9.293 10 4.646 5.354a.5.5 0 010-.708z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="final-decision-modal-body" id="final-decision-modal-body">
+            <!-- 最终决策内容将在这里显示 -->
+          </div>
         </div>
       </div>
     </section>
@@ -311,6 +469,45 @@
 
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
+
+  <!-- AI Decision Fullscreen Modal -->
+  <div class="fullscreen-modal" id="ai-decision-modal">
+    <div class="fullscreen-content">
+      <div class="fullscreen-header">
+        <h3 class="fullscreen-title">AI 群聊决策</h3>
+        <div class="fullscreen-meta" id="fullscreen-meta"></div>
+        <button class="fullscreen-close-btn" id="fullscreen-close-btn" title="关闭全屏">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M4.646 4.646a.5.5 0 01.708 0L10 9.293l4.646-4.647a.5.5 0 01.708.708L10.707 10l4.647 4.646a.5.5 0 01-.708.708L10 10.707l-4.646 4.647a.5.5 0 01-.708-.708L9.293 10 4.646 5.354a.5.5 0 010-.708z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="fullscreen-chat-container">
+        <div class="chat-messages" id="fullscreen-chat-messages"></div>
+        <button class="final-decision-btn fullscreen" id="fullscreen-final-decision-btn" style="display: none;">
+          <span class="btn-icon">🎯</span>
+          <span class="btn-text">查看最终决策</span>
+        </button>
+      </div>
+
+      <!-- 全屏模式下的最终决策弹窗 -->
+      <div class="final-decision-modal fullscreen" id="fullscreen-final-decision-modal">
+        <div class="final-decision-modal-content">
+          <div class="final-decision-modal-header">
+            <h3>🎯 最终决策</h3>
+            <button class="final-decision-modal-close" id="fullscreen-final-decision-modal-close">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M4.646 4.646a.5.5 0 01.708 0L10 9.293l4.646-4.647a.5.5 0 01.708.708L10.707 10l4.647 4.646a.5.5 0 01-.708.708L10 10.707l-4.646 4.647a.5.5 0 01-.708-.708L9.293 10 4.646 5.354a.5.5 0 010-.708z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="final-decision-modal-body" id="fullscreen-final-decision-modal-body">
+            <!-- 最终决策内容将在这里显示 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

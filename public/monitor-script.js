@@ -39,6 +39,7 @@ class TradingMonitor {
         this.loadGitHubStars(); // 加载 GitHub 星标数
         this.initLoginModal(); // 初始化登录弹窗
         this.checkLoginStatus(); // 检查登录状态
+        this.initFullscreen(); // 初始化全屏功能
     }
 
     // 加载初始数据
@@ -476,11 +477,20 @@ class TradingMonitor {
 
     // 渲染最终决策
     renderFinalDecision(decision) {
-        const finalDecisionEl = document.getElementById('final-decision');
-        const contentEl = finalDecisionEl.querySelector('.decision-content');
+        const finalDecisionBtn = document.getElementById('final-decision-btn');
+        const finalDecisionModal = document.getElementById('final-decision-modal');
+        const finalDecisionModalBody = document.getElementById('final-decision-modal-body');
 
-        contentEl.innerHTML = marked.parse(decision.decision);
-        finalDecisionEl.style.display = 'block';
+        if (finalDecisionBtn && finalDecisionModalBody) {
+            // 设置按钮显示
+            finalDecisionBtn.style.display = 'flex';
+
+            // 绑定点击事件
+            finalDecisionBtn.onclick = () => {
+                finalDecisionModalBody.innerHTML = marked.parse(decision.decision);
+                finalDecisionModal.classList.add('active');
+            };
+        }
     }
 
     // 加载顶部 Ticker 价格（从 API 获取）
@@ -1027,6 +1037,147 @@ class TradingMonitor {
             const buttons = document.querySelectorAll('.btn-close-position');
             buttons.forEach(btn => btn.disabled = false);
         }
+    }
+
+    // 初始化全屏功能
+    initFullscreen() {
+        const fullscreenBtn = document.getElementById('ai-decision-fullscreen-btn');
+        const modal = document.getElementById('ai-decision-modal');
+
+        if (!fullscreenBtn || !modal) {
+            console.warn('全屏按钮或模态框未找到');
+            return;
+        }
+
+        const closeBtn = document.getElementById('fullscreen-close-btn');
+
+        // 全屏按钮点击
+        fullscreenBtn.addEventListener('click', () => this.openFullscreen());
+
+        // 关闭按钮点击
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeFullscreen());
+        }
+
+        // ESC键关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeFullscreen();
+            }
+        });
+
+        // 点击背景关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                this.closeFullscreen();
+            }
+        });
+
+        // 初始化最终决策弹窗事件
+        this.initFinalDecisionModal();
+    }
+
+    // 初始化最终决策弹窗事件
+    initFinalDecisionModal() {
+        const finalDecisionModal = document.getElementById('final-decision-modal');
+        const finalDecisionModalClose = document.getElementById('final-decision-modal-close');
+
+        if (finalDecisionModal && finalDecisionModalClose) {
+            // 关闭按钮点击
+            finalDecisionModalClose.addEventListener('click', () => {
+                finalDecisionModal.classList.remove('active');
+            });
+
+            // 点击背景关闭
+            finalDecisionModal.addEventListener('click', (e) => {
+                if (e.target === finalDecisionModal) {
+                    finalDecisionModal.classList.remove('active');
+                }
+            });
+
+            // ESC键关闭
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && finalDecisionModal.classList.contains('active')) {
+                    finalDecisionModal.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    // 打开全屏
+    openFullscreen() {
+        const modal = document.getElementById('ai-decision-modal');
+        const fullscreenMeta = document.getElementById('fullscreen-meta');
+        const fullscreenChat = document.getElementById('fullscreen-chat-messages');
+        const fullscreenDecisionBtn = document.getElementById('fullscreen-final-decision-btn');
+        const fullscreenDecisionModal = document.getElementById('fullscreen-final-decision-modal');
+        const fullscreenDecisionModalBody = document.getElementById('fullscreen-final-decision-modal-body');
+
+        if (!modal) return;
+
+        // 复制元数据
+        const originalMeta = document.getElementById('decision-meta');
+        if (originalMeta && fullscreenMeta) {
+            fullscreenMeta.innerHTML = originalMeta.innerHTML;
+        }
+
+        // 复制聊天消息
+        const originalChat = document.getElementById('chat-messages');
+        if (originalChat && fullscreenChat) {
+            fullscreenChat.innerHTML = originalChat.innerHTML;
+
+            // 滚动到底部
+            setTimeout(() => {
+                fullscreenChat.scrollTop = fullscreenChat.scrollHeight;
+            }, 100);
+        }
+
+        // 复制最终决策按钮状态
+        const originalDecisionBtn = document.getElementById('final-decision-btn');
+        if (originalDecisionBtn && fullscreenDecisionBtn) {
+            fullscreenDecisionBtn.style.display = originalDecisionBtn.style.display;
+
+            // 如果按钮可见，绑定点击事件
+            if (originalDecisionBtn.style.display !== 'none') {
+                fullscreenDecisionBtn.onclick = () => {
+                    const originalDecisionContent = document.querySelector('#final-decision-modal-body');
+                    if (originalDecisionContent) {
+                        fullscreenDecisionModalBody.innerHTML = originalDecisionContent.innerHTML;
+                    }
+                    fullscreenDecisionModal.classList.add('active');
+                };
+            }
+        }
+
+        // 绑定全屏模式下弹窗的关闭事件
+        const fullscreenCloseBtn = document.getElementById('fullscreen-final-decision-modal-close');
+        if (fullscreenCloseBtn) {
+            fullscreenCloseBtn.onclick = () => {
+                fullscreenDecisionModal.classList.remove('active');
+            };
+        }
+
+        // 点击背景关闭
+        if (fullscreenDecisionModal) {
+            fullscreenDecisionModal.addEventListener('click', (e) => {
+                if (e.target === fullscreenDecisionModal) {
+                    fullscreenDecisionModal.classList.remove('active');
+                }
+            });
+        }
+
+        // 显示模态框
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // 防止背景滚动
+    }
+
+    // 关闭全屏
+    closeFullscreen() {
+        const modal = document.getElementById('ai-decision-modal');
+        if (!modal) return;
+
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // 恢复背景滚动
     }
 }
 

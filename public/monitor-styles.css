@@ -245,7 +245,320 @@ body {
     box-sizing: border-box;
 }
 
-/* Chart Section */
+/* AI Agents Introduction Section */
+.agents-intro-section {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+}
+
+.agents-intro-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.agents-intro-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.agents-intro-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* Strategy Group */
+.strategy-group {
+    margin-bottom: 2rem;
+}
+
+.strategy-group.active {
+    margin-bottom: 2.5rem;
+}
+
+.strategy-group:last-child {
+    margin-bottom: 0;
+}
+
+.strategy-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.strategy-title {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.strategy-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: var(--accent-green);
+    color: var(--bg-primary);
+}
+
+.strategy-badge.inactive {
+    background-color: var(--text-dim);
+    color: var(--text-secondary);
+}
+
+.strategy-group.active .strategy-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    max-width: 100%;
+}
+
+.agents-grid.compact {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+/* Other Strategies Section */
+.other-strategies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Agent Cards */
+.agent-card {
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-green), var(--text-primary));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.agent-card:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 255, 170, 0.2);
+}
+
+.agent-card:hover::before {
+    opacity: 1;
+}
+
+.agent-card.main-agent {
+    border: 2px solid var(--accent-green);
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(0, 255, 170, 0.05) 100%);
+}
+
+.agent-card.main-agent .agent-avatar {
+    font-size: 2.5rem;
+}
+
+.agent-card.alpha-beta {
+    border: 2px solid var(--accent-yellow);
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(255, 255, 0, 0.05) 100%);
+}
+
+/* Compact Cards */
+.agent-card.compact {
+    padding: 0.75rem;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.agent-card.compact .agent-avatar {
+    margin-bottom: 0;
+    margin-right: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.agent-card.compact .agent-avatar.small {
+    font-size: 1.2rem;
+}
+
+.agent-card.compact .agent-info {
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.agent-card.compact .agent-description {
+    display: none;
+}
+
+/* Avatar and Text Sizes */
+.agent-avatar {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.agent-avatar.small {
+    font-size: 1.5rem;
+}
+
+.agent-card:hover .agent-avatar {
+    transform: scale(1.1);
+}
+
+.agent-info {
+    margin-bottom: 0.5rem;
+}
+
+.agent-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.agent-name.small {
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem;
+}
+
+.agent-role {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.agent-role.small {
+    font-size: 0.75rem;
+}
+
+.agent-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.agent-card:hover .agent-description {
+    opacity: 1;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .agents-intro-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .agents-intro-title {
+        font-size: 1.2rem;
+    }
+
+    .agents-intro-subtitle {
+        font-size: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .strategy-title {
+        font-size: 1rem;
+    }
+
+    .strategy-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+    }
+
+    .agents-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .agents-grid.compact {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .other-strategies {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .agent-card {
+        padding: 0.75rem;
+    }
+
+    .agent-card.compact {
+        padding: 0.6rem;
+    }
+
+    .agent-avatar {
+        font-size: 1.5rem;
+    }
+
+    .agent-card.main-agent .agent-avatar {
+        font-size: 2rem;
+    }
+
+    .agent-name {
+        font-size: 0.9rem;
+    }
+
+    .agent-name.small {
+        font-size: 0.8rem;
+    }
+
+    .agent-role {
+        font-size: 0.8rem;
+    }
+
+    .agent-role.small {
+        font-size: 0.7rem;
+    }
+
+    .agent-description {
+        font-size: 0.8rem;
+    }
+}
+
 .chart-section {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -1140,7 +1453,6 @@ body {
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 400px;
 }
 
 .chat-messages {
@@ -1150,7 +1462,7 @@ body {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     margin-bottom: 1rem;
-    min-height: 1000px;
+    max-height: 400px; /* 设置最大高度，超出则显示滚动条 */
 }
 
 .chat-message {
@@ -2302,11 +2614,11 @@ body {
 
 /* 群聊界面样式 */
 .chat-container {
-  max-height: 600px;
-  overflow-y: auto;
-  padding: 1rem;
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
 }
 
 .chat-message {
@@ -2400,5 +2712,476 @@ body {
   padding: 2px 8px;
   background-color: var(--bg-tertiary);
   border-radius: 4px;
+}
+
+/* AI群聊决策全屏功能样式 */
+
+/* 标题容器 - 容纳标题和全屏按钮 */
+.decision-title-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 全屏按钮样式 */
+.fullscreen-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-btn:hover {
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+  box-shadow: 0 0 5px var(--border-color);
+  transform: scale(1.1);
+}
+
+.fullscreen-btn svg {
+  display: block;
+}
+
+/* 全屏模态框 */
+.fullscreen-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+
+.fullscreen-modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fullscreenFadeIn 0.3s ease-out;
+}
+
+@keyframes fullscreenFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 全屏内容容器 */
+.fullscreen-content {
+  width: 95%;
+  height: 95%;
+  max-width: 1400px;
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgba(0, 255, 170, 0.3);
+  animation: fullscreenSlideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes fullscreenSlideIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 全屏头部 */
+.fullscreen-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+}
+
+.fullscreen-title {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.fullscreen-meta {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.fullscreen-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-dim);
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-close-btn:hover {
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 10px var(--accent-red);
+  transform: rotate(90deg);
+}
+
+/* 全屏聊天容器 */
+.fullscreen-chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.5rem 2rem;
+  gap: 1.5rem;
+}
+
+#fullscreen-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  min-height: 0;
+}
+
+/* 全屏消息样式优化 */
+.fullscreen-chat-container .chat-message {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.fullscreen-chat-container .message-header {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.fullscreen-chat-container .agent-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+}
+
+.fullscreen-chat-container .message-content {
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* 全屏最终决策样式 - 已移除，现在使用弹窗形式 */
+
+/* 最终决策按钮样式 */
+.final-decision-btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent-green), #00cc88);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 255, 170, 0.3);
+  margin-top: 1rem;
+}
+
+.final-decision-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 170, 0.4);
+  background: linear-gradient(135deg, #00ffaa, var(--accent-green));
+}
+
+.final-decision-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 255, 170, 0.3);
+}
+
+.final-decision-btn .btn-icon {
+  font-size: 1.2rem;
+}
+
+.final-decision-btn.fullscreen {
+  padding: 1.2rem 2rem;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+/* 最终决策弹窗样式 */
+.final-decision-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10001;
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+}
+
+.final-decision-modal.active {
+  display: flex;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.final-decision-modal.fullscreen {
+  z-index: 10001;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.final-decision-modal-content {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--accent-green);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(0, 255, 170, 0.4);
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: scale(0.9) translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.final-decision-modal.fullscreen .final-decision-modal-content {
+  max-width: 900px;
+  max-height: 85vh;
+}
+
+.final-decision-modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+}
+
+.final-decision-modal-header h3 {
+  color: var(--accent-green);
+  margin: 0;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(0, 255, 170, 0.3);
+}
+
+.final-decision-modal-close {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-dim);
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.final-decision-modal-close:hover {
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+  box-shadow: 0 0 10px var(--accent-red);
+  transform: rotate(90deg);
+}
+
+.final-decision-modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.final-decision-modal.fullscreen .final-decision-modal-body {
+  padding: 2.5rem;
+  font-size: 1.05rem;
+}
+
+/* 自定义滚动条（弹窗） */
+.final-decision-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.final-decision-modal-body::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.final-decision-modal-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.final-decision-modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-green);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .final-decision-btn {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .final-decision-btn.fullscreen {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .final-decision-modal-content {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .final-decision-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .final-decision-modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .final-decision-modal-body {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .final-decision-modal.fullscreen .final-decision-modal-body {
+    padding: 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* 自定义滚动条（全屏模式） */
+#fullscreen-chat-messages::-webkit-scrollbar {
+  width: 10px;
+}
+
+#fullscreen-chat-messages::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+#fullscreen-chat-messages::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 5px;
+}
+
+#fullscreen-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .fullscreen-content {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .fullscreen-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .fullscreen-title {
+    font-size: 1rem;
+  }
+
+  .fullscreen-meta {
+    font-size: 0.8rem;
+    gap: 0.8rem;
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  .fullscreen-chat-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  #fullscreen-chat-messages {
+    padding: 1rem;
+  }
+
+  .fullscreen-chat-container .chat-message {
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .fullscreen-chat-container .message-header {
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .fullscreen-chat-container .agent-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .fullscreen-chat-container .message-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  #fullscreen-final-decision {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  #fullscreen-final-decision h4 {
+    font-size: 1.1rem;
+  }
 }
 

@@ -6,7 +6,8 @@
       "Bash(pkill:*)",
       "Bash(taskkill:*)",
       "Bash(netstat:*)",
-      "Bash(wmic:*)"
+      "Bash(wmic:*)",
+      "Bash(node:*)"
     ]
   }
 }
