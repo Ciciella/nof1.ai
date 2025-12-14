@@ -27,6 +27,7 @@ import { createExchangeClient } from "../services/exchangeClient";
 import { getChinaTimeISO } from "../utils/timeUtils";
 import { RISK_PARAMS } from "../config/riskParams";
 import { getQuantoMultiplier } from "../utils/contractUtils";
+import { recordAgentMessage } from "../agents/tradingAgent";
 
 const logger = createLogger({
   name: "trading-loop",
@@ -43,6 +44,74 @@ const SYMBOLS = [...RISK_PARAMS.TRADING_SYMBOLS] as string[];
 // 交易开始时间
 let tradingStartTime = new Date();
 let iterationCount = 0;
+
+/**
+ * 解析对话文本并记录到数据库
+ */
+async function parseAndRecordConversations(decisionId: number, decisionText: string) {
+  try {
+    if (!decisionText) {
+      logger.warn("决策文本为空，跳过对话记录");
+      return;
+    }
+
+    // 正则表达式匹配对话格式：【轮次N-角色名】
+    const messagePattern = /【轮次(\d+)-(.+?)】/g;
+    const messages: Array<{
+      round: number;
+      agentName: string;
+      content: string;
+    }> = [];
+
+    let match;
+    let lastMatchEnd = 0;
+    const sections: Array<{ round: number; agentName: string; start: number }> = [];
+
+    // 找到所有对话section
+    while ((match = messagePattern.exec(decisionText)) !== null) {
+      sections.push({
+        round: parseInt(match[1]),
+        agentName: match[2],
+        start: match.index,
+      });
+    }
+
+    // 提取每个section的内容
+    for (let i = 0; i < sections.length; i++) {
+      const section = sections[i];
+      const nextSection = sections[i + 1];
+      const content = decisionText.substring(
+        section.start + messagePattern.lastIndex,
+        nextSection ? nextSection.start : decisionText.length
+      ).trim();
+
+      if (content) {
+        messages.push({
+          round: section.round,
+          agentName: section.agentName,
+          content: content,
+        });
+      }
+    }
+
+    // 记录每个消息到数据库
+    for (const msg of messages) {
+      await recordAgentMessage(
+        decisionId,
+        msg.agentName,
+        "参与者",
+        "text",
+        msg.content,
+        msg.round
+      );
+      logger.debug(`已记录对话: 轮次${msg.round} - ${msg.agentName}`);
+    }
+
+    logger.info(`成功记录 ${messages.length} 条对话消息`);
+  } catch (error) {
+    logger.error("记录对话失败:", error);
+  }
+}
 
 // 账户风险配置
 let accountRiskConfig = getAccountRiskConfig();
@@ -1627,12 +1696,12 @@ async function executeTradingDecision() {
       logger.info("=".repeat(80));
       logger.info(decisionText || "无决策输出");
       logger.info("=".repeat(80) + "\n");
-      
-      // 保存决策记录
-      await dbClient.execute({
-        sql: `INSERT INTO agent_decisions 
-              (timestamp, iteration, market_analysis, decision, actions_taken, account_value, positions_count)
-              VALUES (?, ?, ?, ?, ?, ?, ?)`,
+
+      // 保存决策记录并获取决策ID
+      const decisionResult = await dbClient.execute({
+        sql: `INSERT INTO agent_decisions
+              (timestamp, iteration, market_analysis, decision, actions_taken, account_value, positions_count, agent_count, discussion_rounds, consensus_reached)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         args: [
           getChinaTimeISO(),
           iterationCount,
@@ -1641,8 +1710,16 @@ async function executeTradingDecision() {
           "[]",
           accountInfo.totalBalance,
           positions.length,
+          3,  // 3个智能体
+          3,  // 3轮讨论
+          true,  // 达成共识
         ],
       });
+
+      const decisionId = decisionResult.lastInsertRowid;
+
+      // 解析对话并记录到agent_conversations表
+      await parseAndRecordConversations(decisionId, decisionText);
       
       // Agent 执行后重新同步持仓数据（优化：只调用一次API）
       const updatedRawPositions = await exchangeClient.getPositions();

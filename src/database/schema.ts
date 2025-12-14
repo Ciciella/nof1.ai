@@ -94,6 +94,20 @@ export interface AgentDecision {
   actions_taken: string;
   account_value: number;
   positions_count: number;
+  agent_count?: number;
+  discussion_rounds?: number;
+  consensus_reached?: boolean;
+}
+
+export interface AgentConversation {
+  id: number;
+  decision_id: number;
+  agent_name: string;
+  agent_role: string;
+  message_type: string;
+  message_content: string;
+  round_number: number;
+  timestamp: string;
 }
 
 export interface SystemConfig {
@@ -185,7 +199,23 @@ CREATE TABLE IF NOT EXISTS agent_decisions (
   decision TEXT NOT NULL,
   actions_taken TEXT NOT NULL,
   account_value REAL NOT NULL,
-  positions_count INTEGER NOT NULL
+  positions_count INTEGER NOT NULL,
+  agent_count INTEGER DEFAULT 1,
+  discussion_rounds INTEGER DEFAULT 1,
+  consensus_reached BOOLEAN DEFAULT FALSE
+);
+
+-- Agent 对话记录表
+CREATE TABLE IF NOT EXISTS agent_conversations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  decision_id INTEGER NOT NULL,
+  agent_name TEXT NOT NULL,
+  agent_role TEXT NOT NULL,
+  message_type TEXT NOT NULL,
+  message_content TEXT NOT NULL,
+  round_number INTEGER NOT NULL DEFAULT 1,
+  timestamp TEXT NOT NULL,
+  FOREIGN KEY (decision_id) REFERENCES agent_decisions(id) ON DELETE CASCADE
 );
 
 -- 系统配置表
@@ -203,5 +233,8 @@ CREATE INDEX IF NOT EXISTS idx_signals_timestamp ON trading_signals(timestamp);
 CREATE INDEX IF NOT EXISTS idx_signals_symbol ON trading_signals(symbol);
 CREATE INDEX IF NOT EXISTS idx_history_timestamp ON account_history(timestamp);
 CREATE INDEX IF NOT EXISTS idx_decisions_timestamp ON agent_decisions(timestamp);
+CREATE INDEX IF NOT EXISTS idx_conversations_decision_id ON agent_conversations(decision_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_round ON agent_conversations(decision_id, round_number);
+CREATE INDEX IF NOT EXISTS idx_conversations_decision_round ON agent_conversations(decision_id, round_number, id);
 `;
 

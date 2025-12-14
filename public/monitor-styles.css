@@ -1150,6 +1150,7 @@ body {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     margin-bottom: 1rem;
+    min-height: 1000px;
 }
 
 .chat-message {
@@ -2297,5 +2298,107 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-green);
+}
+
+/* 群聊界面样式 */
+.chat-container {
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.chat-message {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--bg-tertiary);
+  border-left: 3px solid var(--accent-green);
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.chat-message.round-1 { border-left-color: #00ffaa; }
+.chat-message.round-2 { border-left-color: #0099ff; }
+.chat-message.round-3 { border-left-color: #ff9900; }
+.chat-message.final { border-left-color: #ff00ff; }
+
+.message-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.agent-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.agent-name {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.agent-role {
+  margin-left: 0.5rem;
+  padding: 2px 8px;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.message-content {
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.message-content pre {
+  background-color: var(--bg-primary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 最终决策样式 */
+.final-decision {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(0, 255, 170, 0.1);
+  border: 2px solid var(--accent-green);
+  border-radius: 8px;
+}
+
+.final-decision h4 {
+  color: var(--accent-green);
+  margin-bottom: 0.5rem;
+}
+
+/* 决策元数据样式 */
+.decision-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.discussion-round,
+.agent-count {
+  padding: 2px 8px;
+  background-color: var(--bg-tertiary);
+  border-radius: 4px;
 }
 

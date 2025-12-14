@@ -169,15 +169,21 @@
     <!-- AI Decision Section -->
     <section class="chart-section">
       <div class="chart-header">
-        <h3 class="decision-title">最新 AI 决策</h3>
+        <h3 class="decision-title">AI 群聊决策</h3>
         <div class="decision-meta" id="decision-meta">
           <span class="decision-time">加载中...</span>
           <span class="decision-iteration">#-</span>
+          <span class="discussion-round">轮次 0</span>
+          <span class="agent-count">0个智能体</span>
         </div>
       </div>
-      <div class="decision-container">
-        <div class="decision-content" id="decision-content">
-          <p class="loading">加载 AI 决策中...</p>
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <p class="loading">加载群聊讨论中...</p>
+        </div>
+        <div class="final-decision" id="final-decision" style="display: none;">
+          <h4>🎯 最终决策</h4>
+          <div class="decision-content"></div>
         </div>
       </div>
     </section>

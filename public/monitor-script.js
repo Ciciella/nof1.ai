@@ -335,64 +335,152 @@ class TradingMonitor {
         }
     }
 
-    // 加载 AI 决策日志 - 显示最新一条完整内容
+    // 加载 AI 决策日志 - 群聊模式
     async loadLogsData() {
         try {
-            const response = await fetch('/api/logs?limit=1');
-            const data = await response.json();
-            
-            if (data.error) {
-                console.error('API错误:', data.error);
-                return;
-            }
+            // 首先尝试加载群聊数据
+            const chatResponse = await fetch('/api/conversations?limit=1');
+            const chatData = await chatResponse.json();
 
-            const decisionContent = document.getElementById('decision-content');
             const decisionMeta = document.getElementById('decision-meta');
-            
-            if (data.logs && data.logs.length > 0) {
-                const log = data.logs[0]; // 只取最新一条
-                
-                // 更新决策元信息
-                if (decisionMeta) {
-                    const timestamp = new Date(log.timestamp).toLocaleString('zh-CN', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    });
-                    
-                    decisionMeta.innerHTML = `
-                        <span class="decision-time">${timestamp}</span>
-                        <span class="decision-iteration">#${log.iteration}</span>
-                    `;
-                }
-                
-                // 更新决策详细内容
-                if (decisionContent) {
-                    const decision = log.decision || log.actionsTaken || '暂无决策内容';
-                    // 使用 marked 库将 markdown 转换为 HTML
-                    const htmlContent = marked.parse(decision);
-                    
-                    decisionContent.innerHTML = `<div class="decision-text markdown-content">${htmlContent}</div>`;
+
+            if (!chatData.error && chatData.conversations && chatData.conversations.length > 0) {
+                // 群聊模式
+                this.renderChatMessages(chatData.conversations);
+                this.updateChatMeta(chatData.conversations, decisionMeta);
+
+                // 同时获取最终决策
+                const logResponse = await fetch('/api/logs?limit=1');
+                const logData = await logResponse.json();
+
+                if (!logData.error && logData.logs && logData.logs.length > 0) {
+                    this.renderFinalDecision(logData.logs[0]);
                 }
             } else {
-                if (decisionContent) {
-                    decisionContent.innerHTML = '<p class="no-data">暂无 AI 决策记录</p>';
+                // 使用简化版群聊模式（自我对话）
+                const response = await fetch('/api/logs?limit=1');
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error('API错误:', data.error);
+                    return;
                 }
-                if (decisionMeta) {
-                    decisionMeta.innerHTML = '<span class="decision-time">无数据</span>';
+
+                const decisionContent = document.getElementById('chat-messages');
+
+                if (data.logs && data.logs.length > 0) {
+                    const log = data.logs[0]; // 只取最新一条
+
+                    // 更新决策元信息
+                    if (decisionMeta) {
+                        const timestamp = new Date(log.timestamp).toLocaleString('zh-CN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+
+                        decisionMeta.innerHTML = `
+                            <span class="decision-time">${timestamp}</span>
+                            <span class="decision-iteration">#${log.iteration}</span>
+                            <span class="discussion-round">群聊模式</span>
+                            <span class="agent-count">3个智能体</span>
+                        `;
+                    }
+
+                    // 更新决策详细内容
+                    if (decisionContent) {
+                        const decision = log.decision || log.actionsTaken || '暂无决策内容';
+                        // 使用 marked 库将 markdown 转换为 HTML
+                        const htmlContent = marked.parse(decision);
+
+                        decisionContent.innerHTML = `<div class="decision-text markdown-content">${htmlContent}</div>`;
+                    }
+                } else {
+                    if (decisionContent) {
+                        decisionContent.innerHTML = '<p class="no-data">暂无 AI 决策记录</p>';
+                    }
+                    if (decisionMeta) {
+                        decisionMeta.innerHTML = '<span class="decision-time">无数据</span>';
+                    }
                 }
             }
-            
+
         } catch (error) {
             console.error('加载日志失败:', error);
-            const decisionContent = document.getElementById('decision-content');
+            const decisionContent = document.getElementById('chat-messages');
             if (decisionContent) {
                 decisionContent.innerHTML = `<p class="error">加载失败: ${error.message}</p>`;
             }
         }
+    }
+
+    // 渲染群聊消息
+    renderChatMessages(conversations) {
+        const chatMessages = document.getElementById('chat-messages');
+        if (!chatMessages) return;
+
+        chatMessages.innerHTML = '';
+
+        conversations.forEach(msg => {
+            const messageEl = document.createElement('div');
+            messageEl.className = `chat-message round-${msg.roundNumber}`;
+
+            messageEl.innerHTML = `
+                <div class="message-header">
+                    <div class="agent-avatar">${msg.agentName.charAt(0)}</div>
+                    <span class="agent-name">${msg.agentName}</span>
+                    <span class="agent-role">${msg.agentRole}</span>
+                    <span style="margin-left: auto; font-size: 0.8rem; color: var(--text-dim);">
+                        轮次 ${msg.roundNumber}
+                    </span>
+                </div>
+                <div class="message-content markdown-content">
+                    ${marked.parse(msg.messageContent)}
+                </div>
+            `;
+
+            chatMessages.appendChild(messageEl);
+        });
+
+        // 滚动到底部
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // 更新群聊元数据
+    updateChatMeta(conversations, decisionMeta) {
+        if (!decisionMeta) return;
+
+        const latestMessage = conversations[0];
+        const timestamp = new Date(latestMessage.timestamp).toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        const maxRound = Math.max(...conversations.map(c => c.roundNumber));
+        const uniqueAgents = new Set(conversations.map(c => c.agentName));
+
+        decisionMeta.innerHTML = `
+            <span class="decision-time">${timestamp}</span>
+            <span class="decision-iteration">#${latestMessage.decisionId || '-'}</span>
+            <span class="discussion-round">轮次 ${maxRound}</span>
+            <span class="agent-count">${uniqueAgents.size}个智能体</span>
+        `;
+    }
+
+    // 渲染最终决策
+    renderFinalDecision(decision) {
+        const finalDecisionEl = document.getElementById('final-decision');
+        const contentEl = finalDecisionEl.querySelector('.decision-content');
+
+        contentEl.innerHTML = marked.parse(decision.decision);
+        finalDecisionEl.style.display = 'block';
     }
 
     // 加载顶部 Ticker 价格（从 API 获取）

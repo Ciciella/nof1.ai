@@ -250,14 +250,14 @@ export function createApiRoutes() {
   app.get("/api/logs", async (c) => {
     try {
       const limit = c.req.query("limit") || "20";
-      
+
       const result = await dbClient.execute({
-        sql: `SELECT * FROM agent_decisions 
-              ORDER BY timestamp DESC 
+        sql: `SELECT * FROM agent_decisions
+              ORDER BY timestamp DESC
               LIMIT ?`,
         args: [Number.parseInt(limit)],
       });
-      
+
       const logs = result.rows.map((row: any) => ({
         id: row.id,
         timestamp: row.timestamp,
@@ -267,9 +267,50 @@ export function createApiRoutes() {
         accountValue: row.account_value,
         positionsCount: row.positions_count,
       }));
-      
+
       return c.json({ logs });
     } catch (error: any) {
+      return c.json({ error: error.message }, 500);
+    }
+  });
+
+  /**
+   * 获取 Agent 群聊对话
+   */
+  app.get("/api/conversations", async (c) => {
+    try {
+      const limit = c.req.query("limit") || "20";
+      const decisionId = c.req.query("decision_id");
+
+      let sql = `SELECT * FROM agent_conversations`;
+      let args = [];
+
+      if (decisionId) {
+        sql += ` WHERE decision_id = ? ORDER BY round_number ASC, id ASC`;
+        args = [Number.parseInt(decisionId)];
+      } else {
+        sql += ` WHERE decision_id = (SELECT id FROM agent_decisions ORDER BY timestamp DESC LIMIT 1) ORDER BY round_number ASC, id ASC`;
+      }
+
+      const result = await dbClient.execute({
+        sql,
+        args,
+      });
+
+      const conversations = result.rows.map((row: any) => ({
+        id: row.id,
+        decisionId: row.decision_id,
+        agentName: row.agent_name,
+        agentRole: row.agent_role,
+        messageType: row.message_type,
+        messageContent: row.message_content,
+        roundNumber: row.round_number,
+        timestamp: row.timestamp,
+      }));
+
+      return c.json({ conversations });
+    } catch (error: any) {
+      logger.error("获取群聊对话失败:", error);
       return c.json({ error: error.message }, 500);
     }
   });
