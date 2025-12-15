@@ -247,11 +247,12 @@ body {
 
 /* AI Agents Introduction Section */
 .agents-intro-section {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    max-width: 100%;
 }
 
 .agents-intro-header {
@@ -575,10 +576,10 @@ body {
     grid-row: 1 / 2;
 }
 
-/* AI 决策区域 - 占据第二行，跨两列 */
-.chart-section:nth-child(2) {
+/* AI 决策区域 - 占据第三行，跨两列 */
+.chart-section:nth-child(4) {
     grid-column: 1 / 3;
-    grid-row: 2 / 3;
+    grid-row: 3 / 4;
 }
 
 .chart-header {
@@ -1127,7 +1128,7 @@ body {
 /* Positions Section */
 .positions-section {
     grid-column: 1 / 3;
-    grid-row: 3 / 4;
+    grid-row: 4 / 5;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
     padding: 1.5rem;
@@ -1194,7 +1195,7 @@ body {
 /* Trades Section */
 .trades-section {
     grid-column: 1 / 3;
-    grid-row: 4 / 5;
+    grid-row: 5 / 6;
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
     padding: 1.5rem;
@@ -1539,7 +1540,7 @@ body {
 @media (max-width: 1024px) {
     .main-content {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto auto auto auto;
     }
 
     /* 资产曲线 */
@@ -1556,23 +1557,29 @@ body {
         min-height: auto;
     }
 
-    /* AI 决策 */
-    .chart-section:nth-child(2) {
+    /* 智能体团队介绍 */
+    .agents-intro-section {
         grid-column: 1 / 2;
         grid-row: 3 / 4;
+    }
+
+    /* AI 决策 */
+    .chart-section:nth-child(4) {
+        grid-column: 1 / 2;
+        grid-row: 4 / 5;
         min-height: 400px;
     }
 
     /* 持仓 */
     .positions-section {
         grid-column: 1 / 2;
-        grid-row: 4 / 5;
+        grid-row: 5 / 6;
     }
 
     /* 交易历史 */
     .trades-section {
         grid-column: 1 / 2;
-        grid-row: 5 / 6;
+        grid-row: 6 / 7;
     }
 }
 
